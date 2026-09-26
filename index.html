@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PGN Founders Quiz</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .quiz {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      text-align: center;
+      width: 400px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      font-size: 18px;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #feedback {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    #score {
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="quiz">
+
+  <h1>PGN Founders Quiz</h1>
+
+  <p>Type the full name of any PGN founder.</p>
+  <p><strong>Perfect spelling required.</strong></p>
+
+  <input
+    type="text"
+    id="answer"
+    placeholder="Enter founder's full name"
+    autocomplete="off"
+  >
+
+  <br>
+
+  <button onclick="checkAnswer()">Submit</button>
+
+  <div id="feedback"></div>
+
+  <div id="score">
+    Correct: <span id="correct">0</span> |
+    Attempts: <span id="attempts">0</span>
+  </div>
+
+</div>
+
+<script>
+
+const founders = [
+  "Celeste Weyl",
+  "Elizabeth Conroy Fleming",
+  "Helen Vogel Purcell",
+  "Marge Mclnerney Hawes",
+  "Mary Chard Nalbach",
+  "Sylvia Pekar Arnold"
+];
+
+let correct = 0;
+let attempts = 0;
+
+function checkAnswer() {
+
+  const input = document.getElementById("answer");
+  const answer = input.value;
+
+  attempts++;
+
+  if (founders.includes(answer)) {
+
+    correct++;
+
+    document.getElementById("feedback").innerHTML =
+      "✅ Correct!";
+
+    // Remove the correctly answered founder
+    const index = founders.indexOf(answer);
+    founders.splice(index, 1);
+
+    if (founders.length === 0) {
+      document.getElementById("feedback").innerHTML =
+        "🎉 You got all 6 founders!";
+      input.disabled = true;
+    }
+
+  } else {
+
+    document.getElementById("feedback").innerHTML =
+      "❌ Incorrect — check your spelling.";
+
+  }
+
+  document.getElementById("correct").innerText = correct;
+  document.getElementById("attempts").innerText = attempts;
+
+  input.value = "";
+  input.focus();
+}
+
+// Allow Enter key to submit
+document.getElementById("answer").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    checkAnswer();
+  }
+});
+
+</script>
+
+</body>
+</html>
