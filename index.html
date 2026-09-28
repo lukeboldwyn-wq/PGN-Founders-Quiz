@@ -6,6 +6,10 @@
   <title>PGN Founders Quiz</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
@@ -14,19 +18,34 @@
       align-items: center;
       min-height: 100vh;
       margin: 0;
+      overflow-x: hidden;
     }
 
     .quiz {
       background: white;
       padding: 40px;
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.15);
       text-align: center;
       width: 430px;
+      max-width: 92%;
+      position: relative;
+      z-index: 2;
     }
 
     h1 {
+      margin-top: 0;
       margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .spelling {
+      font-weight: bold;
+      margin-top: 5px;
     }
 
     .progress-text {
@@ -48,14 +67,16 @@
       height: 100%;
       width: 0%;
       background: #4CAF50;
-      transition: width 0.3s;
+      transition: width 0.4s ease;
     }
 
     input {
-      width: 90%;
-      padding: 12px;
+      width: 100%;
+      padding: 13px;
       font-size: 18px;
-      margin: 15px 0;
+      margin: 12px 0;
+      border: 1px solid #aaa;
+      border-radius: 7px;
     }
 
     button {
@@ -63,7 +84,12 @@
       font-size: 16px;
       cursor: pointer;
       border: none;
-      border-radius: 6px;
+      border-radius: 7px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.03);
     }
 
     .submit-btn {
@@ -80,181 +106,611 @@
       font-size: 18px;
       font-weight: bold;
       margin: 20px 0;
-      min-height: 22px;
+      min-height: 24px;
     }
 
     .completed-list {
       text-align: left;
       margin-top: 25px;
+      background: #f7f7f7;
+      padding: 15px 20px;
+      border-radius: 10px;
     }
 
     .completed-list h3 {
       text-align: center;
+      margin-top: 0;
     }
 
     #completedNames {
-      line-height: 1.8;
+      line-height: 1.9;
+    }
+
+    /* COMPLETION SCREEN */
+
+    #celebration {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 50;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+
+    .celebration-content {
+      z-index: 100;
+      padding: 30px;
+      animation: popIn 0.6s ease;
+    }
+
+    .celebration-content h1 {
+      font-size: 55px;
+      margin-bottom: 10px;
+    }
+
+    .celebration-content h2 {
+      font-size: 30px;
+      margin-top: 5px;
+    }
+
+    .celebration-content p {
+      font-size: 20px;
+    }
+
+    .celebration-content button {
+      margin: 8px;
+      font-size: 17px;
+    }
+
+    .music-btn {
+      background: white;
+      color: black;
+    }
+
+    .again-btn {
+      background: #4CAF50;
+      color: white;
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+
+      70% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* CONFETTI */
+
+    .confetti {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      z-index: 60;
+      pointer-events: none;
+    }
+
+    @keyframes fallFromTop {
+      from {
+        transform: translateY(-50px) rotate(0deg);
+      }
+      to {
+        transform: translateY(110vh) rotate(1000deg);
+      }
+    }
+
+    @keyframes shootFromLeft {
+      from {
+        transform: translate(-50px, 0) rotate(0deg);
+      }
+      to {
+        transform: translate(110vw, var(--yMove)) rotate(900deg);
+      }
+    }
+
+    @keyframes shootFromRight {
+      from {
+        transform: translate(50px, 0) rotate(0deg);
+      }
+      to {
+        transform: translate(-110vw, var(--yMove)) rotate(-900deg);
+      }
+    }
+
+    @keyframes shootFromBottom {
+      from {
+        transform: translateY(50px) rotate(0deg);
+      }
+      to {
+        transform: translateY(-110vh) rotate(900deg);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .celebration-content h1 {
+        font-size: 40px;
+      }
+
+      .celebration-content h2 {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<div class="quiz">
+  <div class="quiz">
 
-  <h1>PGN Founders Quiz</h1>
+    <h1>PGN Founders Quiz</h1>
 
-  <p>Enter all 6 PGN founders.</p>
-  <p><strong>Perfect spelling required.</strong></p>
+    <p class="subtitle">
+      Enter all 6 PGN founders.
+    </p>
 
-  <div class="progress-text">
-    Progress: <span id="progress">0</span> / 6
-  </div>
+    <p class="spelling">
+      Perfect spelling required.
+    </p>
 
-  <div class="progress-bar">
-    <div class="progress-fill" id="progressFill"></div>
-  </div>
-
-  <input
-    type="text"
-    id="answer"
-    placeholder="Enter founder's full name"
-    autocomplete="off"
-  >
-
-  <br>
-
-  <button class="submit-btn" onclick="checkAnswer()">
-    Submit
-  </button>
-
-  <div id="feedback"></div>
-
-  <div class="completed-list">
-    <h3>Founders Completed</h3>
-    <div id="completedNames">
-      None yet
+    <div class="progress-text">
+      Progress:
+      <span id="progress">0</span> / 6
     </div>
+
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        id="progressFill">
+      </div>
+    </div>
+
+    <input
+      type="text"
+      id="answer"
+      placeholder="Enter founder's full name"
+      autocomplete="off"
+    >
+
+    <br>
+
+    <button
+      class="submit-btn"
+      onclick="checkAnswer()">
+      Submit
+    </button>
+
+    <div id="feedback"></div>
+
+    <div class="completed-list">
+
+      <h3>Founders Completed</h3>
+
+      <div id="completedNames">
+        None yet
+      </div>
+
+    </div>
+
+    <button
+      class="reset-btn"
+      onclick="resetQuiz()">
+      Reset Quiz
+    </button>
+
   </div>
 
-  <button class="reset-btn" onclick="resetQuiz()">
-    Reset Quiz
-  </button>
 
-</div>
+  <!-- COMPLETION CELEBRATION -->
+
+  <div id="celebration">
+
+    <div class="celebration-content">
+
+      <h1>🎉 6 / 6 🎉</h1>
+
+      <h2>YOU KNOW ALL THE FOUNDERS!</h2>
+
+      <p>PNM quiz locked in.</p>
+
+      <button
+        class="music-btn"
+        onclick="playCongratulations()">
+        ▶ Play Congratulations
+      </button>
+
+      <br>
+
+      <button
+        class="again-btn"
+        onclick="resetQuiz()">
+        Play Again
+      </button>
+
+    </div>
+
+  </div>
 
 
-<script>
+  <script>
 
-const founders = [
-  "Celeste Weyl",
-  "Elizabeth Conroy Fleming",
-  "Helen Vogel Purcell",
-  "Marge Mclnerney Hawes",
-  "Mary Chard Nalbach",
-  "Sylvia Pekar Arnold"
-];
+    const founders = [
+      "Celeste Weyl",
+      "Elizabeth Conroy Fleming",
+      "Helen Vogel Purcell",
+      "Marge McInerney Hawes",
+      "Mary Chard Nalbach",
+      "Sylvia Pekar Arnold"
+    ];
 
-let completed = [];
+    let completed = [];
 
-function checkAnswer() {
 
-  const input = document.getElementById("answer");
-  const answer = input.value;
+    function checkAnswer() {
 
-  // Correct founder
-  if (founders.includes(answer)) {
+      const input =
+        document.getElementById("answer");
 
-    // Already entered
-    if (completed.includes(answer)) {
+      const answer = input.value;
 
-      document.getElementById("feedback").innerHTML =
-        "⚠️ You already got that founder!";
 
-    } else {
+      if (founders.includes(answer)) {
 
-      completed.push(answer);
+        if (completed.includes(answer)) {
 
-      document.getElementById("feedback").innerHTML =
-        "✅ Correct!";
+          document.getElementById("feedback").innerHTML =
+            "⚠️ You already got that founder!";
 
-      updateProgress();
+        }
+
+        else {
+
+          completed.push(answer);
+
+          document.getElementById("feedback").innerHTML =
+            "✅ Correct!";
+
+          updateProgress();
+
+        }
+
+      }
+
+      else {
+
+        document.getElementById("feedback").innerHTML =
+          "❌ Incorrect — check your spelling.";
+
+      }
+
+
+      input.value = "";
+      input.focus();
+
     }
 
-  } else {
-
-    document.getElementById("feedback").innerHTML =
-      "❌ Incorrect — check your spelling.";
-
-  }
-
-  input.value = "";
-  input.focus();
-}
 
 
-function updateProgress() {
+    function updateProgress() {
 
-  const progress = completed.length;
-
-  document.getElementById("progress").innerText = progress;
-
-  const percent = (progress / founders.length) * 100;
-
-  document.getElementById("progressFill").style.width =
-    percent + "%";
-
-  // Display completed founders
-  let list = "";
-
-  completed.forEach(function(name) {
-    list += "✓ " + name + "<br>";
-  });
-
-  document.getElementById("completedNames").innerHTML = list;
-
-  // Finished quiz
-  if (progress === founders.length) {
-
-    document.getElementById("feedback").innerHTML =
-      "🎉 6/6 — You know all the founders!";
-
-  }
-}
+      const progress = completed.length;
 
 
-function resetQuiz() {
-
-  completed = [];
-
-  document.getElementById("progress").innerText = "0";
-
-  document.getElementById("progressFill").style.width = "0%";
-
-  document.getElementById("completedNames").innerHTML =
-    "None yet";
-
-  document.getElementById("feedback").innerHTML = "";
-
-  document.getElementById("answer").value = "";
-
-  document.getElementById("answer").focus();
-}
+      document.getElementById("progress").innerText =
+        progress;
 
 
-// Submit using Enter key
-document.getElementById("answer").addEventListener(
-  "keypress",
-  function(event) {
+      const percent =
+        (progress / founders.length) * 100;
 
-    if (event.key === "Enter") {
-      checkAnswer();
+
+      document.getElementById("progressFill").style.width =
+        percent + "%";
+
+
+      let list = "";
+
+
+      completed.forEach(function(name) {
+
+        list += "✓ " + name + "<br>";
+
+      });
+
+
+      document.getElementById("completedNames").innerHTML =
+        list;
+
+
+      if (progress === founders.length) {
+
+        document.getElementById("feedback").innerHTML =
+          "🎉 6/6 — Complete!";
+
+        setTimeout(startCelebration, 500);
+
+      }
+
     }
 
-  }
-);
 
-</script>
+
+    function resetQuiz() {
+
+      completed = [];
+
+
+      document.getElementById("progress").innerText =
+        "0";
+
+
+      document.getElementById("progressFill").style.width =
+        "0%";
+
+
+      document.getElementById("completedNames").innerHTML =
+        "None yet";
+
+
+      document.getElementById("feedback").innerHTML =
+        "";
+
+
+      document.getElementById("answer").value =
+        "";
+
+
+      document.getElementById("celebration").style.display =
+        "none";
+
+
+      // Remove old confetti
+      document
+        .querySelectorAll(".confetti")
+        .forEach(function(piece) {
+          piece.remove();
+        });
+
+
+      document.getElementById("answer").focus();
+
+    }
+
+
+
+    function startCelebration() {
+
+      document.getElementById("celebration").style.display =
+        "flex";
+
+      launchConfetti();
+
+      // Another wave
+      setTimeout(launchConfetti, 800);
+
+      // And another
+      setTimeout(launchConfetti, 1600);
+
+    }
+
+
+
+    function launchConfetti() {
+
+      const colors = [
+        "#ff1744",
+        "#ffea00",
+        "#00e676",
+        "#2979ff",
+        "#d500f9",
+        "#ff9100",
+        "#ffffff"
+      ];
+
+
+      // FROM TOP
+
+      for (let i = 0; i < 70; i++) {
+
+        const piece =
+          document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.left =
+          Math.random() * 100 + "vw";
+
+        piece.style.top =
+          "-20px";
+
+        piece.style.backgroundColor =
+          colors[
+            Math.floor(
+              Math.random() * colors.length
+            )
+          ];
+
+        piece.style.animation =
+          "fallFromTop " +
+          (2 + Math.random() * 3) +
+          "s linear forwards";
+
+        document.body.appendChild(piece);
+
+        setTimeout(function() {
+          piece.remove();
+        }, 5500);
+
+      }
+
+
+      // FROM LEFT
+
+      for (let i = 0; i < 40; i++) {
+
+        const piece =
+          document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.left =
+          "-20px";
+
+        piece.style.top =
+          Math.random() * 100 + "vh";
+
+        piece.style.backgroundColor =
+          colors[
+            Math.floor(
+              Math.random() * colors.length
+            )
+          ];
+
+        piece.style.setProperty(
+          "--yMove",
+          (Math.random() * 400 - 200) + "px"
+        );
+
+        piece.style.animation =
+          "shootFromLeft " +
+          (2 + Math.random() * 2) +
+          "s ease-out forwards";
+
+        document.body.appendChild(piece);
+
+        setTimeout(function() {
+          piece.remove();
+        }, 4500);
+
+      }
+
+
+      // FROM RIGHT
+
+      for (let i = 0; i < 40; i++) {
+
+        const piece =
+          document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.right =
+          "-20px";
+
+        piece.style.top =
+          Math.random() * 100 + "vh";
+
+        piece.style.backgroundColor =
+          colors[
+            Math.floor(
+              Math.random() * colors.length
+            )
+          ];
+
+        piece.style.setProperty(
+          "--yMove",
+          (Math.random() * 400 - 200) + "px"
+        );
+
+        piece.style.animation =
+          "shootFromRight " +
+          (2 + Math.random() * 2) +
+          "s ease-out forwards";
+
+        document.body.appendChild(piece);
+
+        setTimeout(function() {
+          piece.remove();
+        }, 4500);
+
+      }
+
+
+      // FROM BOTTOM
+
+      for (let i = 0; i < 50; i++) {
+
+        const piece =
+          document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.left =
+          Math.random() * 100 + "vw";
+
+        piece.style.bottom =
+          "-20px";
+
+        piece.style.backgroundColor =
+          colors[
+            Math.floor(
+              Math.random() * colors.length
+            )
+          ];
+
+        piece.style.animation =
+          "shootFromBottom " +
+          (2 + Math.random() * 2) +
+          "s ease-out forwards";
+
+        document.body.appendChild(piece);
+
+        setTimeout(function() {
+          piece.remove();
+        }, 4500);
+
+      }
+
+    }
+
+
+
+    function playCongratulations() {
+
+      window.open(
+        "https://www.youtube.com/results?search_query=Post+Malone+Congratulations+official",
+        "_blank"
+      );
+
+    }
+
+
+
+    // ENTER KEY SUBMITS ANSWER
+
+    document
+      .getElementById("answer")
+      .addEventListener(
+        "keydown",
+        function(event) {
+
+          if (event.key === "Enter") {
+
+            checkAnswer();
+
+          }
+
+        }
+      );
+
+
+    // Focus box automatically
+
+    document
+      .getElementById("answer")
+      .focus();
+
+  </script>
 
 </body>
 </html>
