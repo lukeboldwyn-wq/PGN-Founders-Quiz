@@ -3,360 +3,297 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PGN Founders Quiz</title>
+
+<title>PGN Requirements Quiz</title>
 
 <style>
-* { box-sizing: border-box; }
+
+* {
+    box-sizing: border-box;
+}
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
 }
 
 .quiz {
-  background: white;
-  padding: 40px;
-  border-radius: 16px;
-  box-shadow: 0 4px 18px rgba(0,0,0,.15);
-  text-align: center;
-  width: 440px;
-  max-width: 92%;
-  position: relative;
-  z-index: 5;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.15);
+    text-align: center;
+    width: 600px;
+    max-width: 94%;
+    position: relative;
+    z-index: 5;
 }
 
-h1 { margin-top: 0; }
+h1 {
+    margin-top: 0;
+}
 
 .progress-text {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 25px 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 25px 0 10px;
 }
 
 .progress-bar {
-  width: 100%;
-  height: 18px;
-  background: #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 20px;
+    width: 100%;
+    height: 18px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .progress-fill {
-  height: 100%;
-  width: 0%;
-  background: #4CAF50;
-  transition: width .4s;
+    height: 100%;
+    width: 0%;
+    background: #4CAF50;
+    transition: width .4s;
 }
 
-input {
-  width: 100%;
-  padding: 13px;
-  font-size: 18px;
-  margin: 12px 0;
-  border: 1px solid #aaa;
-  border-radius: 7px;
+textarea {
+    width: 100%;
+    padding: 13px;
+    font-size: 16px;
+    margin: 12px 0;
+    border: 1px solid #aaa;
+    border-radius: 7px;
+    resize: vertical;
+    min-height: 85px;
+    font-family: Arial, sans-serif;
 }
 
 button {
-  padding: 12px 22px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 7px;
+    padding: 12px 22px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 7px;
 }
 
 .submit-btn {
-  background: #222;
-  color: white;
+    background: #222;
+    color: white;
 }
 
 .reset-btn {
-  background: #ddd;
-  margin-top: 20px;
+    background: #ddd;
+    margin-top: 20px;
 }
 
 #feedback {
-  font-size: 18px;
-  font-weight: bold;
-  min-height: 25px;
-  margin: 18px 0;
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 25px;
+    margin: 18px 0;
 }
 
 .completed-list {
-  text-align: left;
-  background: #f7f7f7;
-  padding: 15px 20px;
-  border-radius: 10px;
+    text-align: left;
+    background: #f7f7f7;
+    padding: 15px 20px;
+    border-radius: 10px;
 }
 
 .completed-list h3 {
-  text-align: center;
-  margin-top: 0;
+    text-align: center;
+    margin-top: 0;
 }
 
-#completedNames {
-  line-height: 1.9;
+#completedItems {
+    line-height: 1.6;
 }
 
-/* =========================
-   FINAL CELEBRATION
-========================= */
-
-#celebration {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle, #311b92 0%, #090016 55%, #000 100%);
-  z-index: 100;
-  overflow: hidden;
-}
-
-.celebration-text {
-  position: absolute;
-  z-index: 500;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: white;
-  width: 90%;
-  animation: megaPop .8s ease;
-}
-
-.celebration-text h1 {
-  font-size: clamp(55px, 10vw, 110px);
-  margin: 0;
-  text-shadow:
-    0 0 10px white,
-    0 0 30px gold,
-    0 0 60px orange;
-}
-
-.celebration-text h2 {
-  font-size: clamp(28px, 5vw, 55px);
-  margin: 10px;
-}
-
-.celebration-text p {
-  font-size: 23px;
-}
-
-.play-again {
-  font-size: 19px;
-  background: white;
-  margin-top: 15px;
-}
-
-/* =========================
-   CONFETTI
-========================= */
+/* CONFETTI */
 
 .confetti {
-  position: fixed;
-  width: 11px;
-  height: 17px;
-  z-index: 300;
-  pointer-events: none;
-}
-
-@keyframes confettiFall {
-  from {
-    transform: translateY(-10vh) rotate(0deg);
-  }
-  to {
-    transform: translateY(115vh) rotate(1200deg);
-  }
-}
-
-@keyframes cannonLeft {
-  0% {
-    transform: translate(0,0) rotate(0);
-  }
-  100% {
-    transform:
-      translate(var(--x), var(--y))
-      rotate(1200deg);
-  }
-}
-
-@keyframes cannonRight {
-  0% {
-    transform: translate(0,0) rotate(0);
-  }
-  100% {
-    transform:
-      translate(var(--x), var(--y))
-      rotate(-1200deg);
-  }
-}
-
-/* =========================
-   BALLOONS
-========================= */
-
-.balloon {
-  position: fixed;
-  bottom: -150px;
-  width: 55px;
-  height: 70px;
-  border-radius: 50%;
-  z-index: 200;
-  opacity: .9;
-  animation: balloonRise linear forwards;
-}
-
-.balloon::after {
-  content: "";
-  position: absolute;
-  width: 1px;
-  height: 80px;
-  background: rgba(255,255,255,.7);
-  left: 50%;
-  top: 70px;
-}
-
-@keyframes balloonRise {
-  0% {
-    transform: translateY(0) translateX(0) rotate(-5deg);
-  }
-  50% {
-    transform: translateY(-60vh) translateX(40px) rotate(5deg);
-  }
-  100% {
-    transform: translateY(-130vh) translateX(-30px) rotate(-5deg);
-  }
-}
-
-/* =========================
-   FIREWORKS
-========================= */
-
-.fireworkParticle {
-  position: fixed;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  z-index: 250;
-  pointer-events: none;
-  animation: explode 1.4s ease-out forwards;
+    position: fixed;
+    width: 11px;
+    height: 16px;
+    z-index: 300;
+    pointer-events: none;
 }
 
 @keyframes explode {
-  from {
-    transform: translate(0,0);
-    opacity: 1;
-  }
-  to {
-    transform: translate(var(--x),var(--y));
-    opacity: 0;
-  }
+    from {
+        transform: translate(0,0) rotate(0);
+        opacity: 1;
+    }
+
+    to {
+        transform:
+            translate(var(--x),var(--y))
+            rotate(1000deg);
+        opacity: 0;
+    }
 }
 
-/* =========================
-   CANNONS
-========================= */
+@keyframes rain {
+    from {
+        transform: translateY(-10vh) rotate(0);
+    }
 
-.cannon {
-  position: fixed;
-  bottom: -10px;
-  font-size: 85px;
-  z-index: 220;
-  filter: drop-shadow(0 0 15px white);
+    to {
+        transform: translateY(115vh) rotate(1200deg);
+    }
 }
 
-.cannon.left {
-  left: 15px;
-  transform: rotate(-25deg);
+/* FINAL CELEBRATION */
+
+#celebration {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle, #311b92 0%, #090016 55%, #000 100%);
+    z-index: 100;
+    overflow: hidden;
 }
 
-.cannon.right {
-  right: 15px;
-  transform: scaleX(-1) rotate(-25deg);
+.celebration-text {
+    position: absolute;
+    z-index: 500;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    color: white;
+    text-align: center;
+    width: 90%;
 }
 
-/* =========================
-   SCREEN FLASH
-========================= */
-
-.flash {
-  position: fixed;
-  inset: 0;
-  background: white;
-  opacity: 0;
-  z-index: 190;
-  pointer-events: none;
-  animation: flash .35s;
+.celebration-text h1 {
+    font-size: clamp(55px,10vw,110px);
+    margin: 0;
+    text-shadow:
+        0 0 10px white,
+        0 0 30px gold,
+        0 0 60px orange;
 }
 
-@keyframes flash {
-  0% { opacity: 0; }
-  40% { opacity: .65; }
-  100% { opacity: 0; }
+.celebration-text h2 {
+    font-size: clamp(25px,5vw,50px);
 }
 
-@keyframes megaPop {
-  0% {
-    transform: translate(-50%,-50%) scale(.1) rotate(-10deg);
-    opacity: 0;
-  }
-  70% {
-    transform: translate(-50%,-50%) scale(1.15) rotate(2deg);
-  }
-  100% {
-    transform: translate(-50%,-50%) scale(1);
-    opacity: 1;
-  }
+.play-again {
+    background: white;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+/* BALLOONS */
+
+.balloon {
+    position: fixed;
+    bottom: -100px;
+    width: 55px;
+    height: 70px;
+    border-radius: 50%;
+    z-index: 200;
+    animation: balloonRise linear forwards;
+}
+
+.balloon::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 80px;
+    background: white;
+    left: 50%;
+    top: 70px;
+}
+
+@keyframes balloonRise {
+
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform:
+            translateY(-130vh)
+            translateX(var(--drift));
+    }
+
 }
 
 </style>
 </head>
 
+
 <body>
 
 <div class="quiz">
 
-<h1>PGN Founders Quiz</h1>
+<h1>PGN Requirements Quiz</h1>
 
-<p>Enter all 6 PGN founders.</p>
-<p><strong>Perfect spelling required.</strong></p>
+<p>Enter all 4 requirements.</p>
+
+<p>
+<strong>Perfect spelling and wording required.</strong>
+</p>
 
 <div class="progress-text">
-Progress: <span id="progress">0</span> / 6
+
+Progress:
+<span id="progress">0</span> / 4
+
 </div>
 
 <div class="progress-bar">
-<div class="progress-fill" id="progressFill"></div>
+
+<div
+class="progress-fill"
+id="progressFill">
 </div>
 
-<input
+</div>
+
+<textarea
 id="answer"
-type="text"
-placeholder="Enter founder's full name"
+placeholder="Type one complete requirement here..."
 autocomplete="off">
+</textarea>
 
 <br>
 
-<button class="submit-btn" onclick="checkAnswer()">
+<button
+class="submit-btn"
+onclick="checkAnswer()">
+
 Submit
+
 </button>
 
 <div id="feedback"></div>
 
+
 <div class="completed-list">
-<h3>Founders Completed</h3>
-<div id="completedNames">None yet</div>
+
+<h3>Requirements Completed</h3>
+
+<div id="completedItems">
+None yet
 </div>
 
-<button class="reset-btn" onclick="resetQuiz()">
+</div>
+
+
+<button
+class="reset-btn"
+onclick="resetQuiz()">
+
 Reset Quiz
+
 </button>
 
 </div>
@@ -366,19 +303,20 @@ Reset Quiz
 
 <div id="celebration">
 
-<div class="cannon left">💥</div>
-<div class="cannon right">💥</div>
-
 <div class="celebration-text">
 
-<h1>🎉 6 / 6 🎉</h1>
+<h1>🎉 4 / 4 🎉</h1>
 
-<h2>YOU KNOW ALL THE FOUNDERS!</h2>
+<h2>ALL REQUIREMENTS COMPLETE!</h2>
 
 <p>PNM QUIZ LOCKED IN.</p>
 
-<button class="play-again" onclick="resetQuiz()">
+<button
+class="play-again"
+onclick="resetQuiz()">
+
 Run It Back
+
 </button>
 
 </div>
@@ -388,515 +326,504 @@ Run It Back
 
 <script>
 
-const founders = [
-"Celeste Weyl",
-"Elizabeth Conroy Fleming",
-"Helen Vogel Purcell",
-"Marge McInerney Hawes",
-"Mary Chard Nalbach",
-"Sylvia Pekar Arnold"
+/* EXACT ACCEPTED ANSWERS */
+
+const requirements = [
+
+"To have a voice in the business and programs of our chapter",
+
+"To be kept informed of chapter activities and messages from the National Fraternity",
+
+"To be represented and guided by competent leaders",
+
+"To express opinions, make suggestions and offer constructive criticism"
+
 ];
 
+
 let completed = [];
-let celebrationIntervals = [];
+
+let celebrationInterval;
 
 
-/* =========================
-   ANSWER CHECKING
-========================= */
+/* CHECK ANSWER */
 
 function checkAnswer() {
 
-  const input = document.getElementById("answer");
-  const answer = input.value;
+    const input =
+        document.getElementById("answer");
 
-  if (founders.includes(answer)) {
+    const answer =
+        input.value.trim();
 
-    if (completed.includes(answer)) {
 
-      document.getElementById("feedback").innerHTML =
-      "⚠️ You already got that founder!";
+    if (requirements.includes(answer)) {
 
-    } else {
+        if (completed.includes(answer)) {
 
-      completed.push(answer);
+            document.getElementById("feedback").innerHTML =
+                "⚠️ You already got that requirement!";
 
-      document.getElementById("feedback").innerHTML =
-      "✅ Correct!";
+        }
 
-      updateProgress();
+        else {
 
-      /* MINI CELEBRATION EVERY CORRECT ANSWER */
-      miniConfetti();
+            completed.push(answer);
+
+            document.getElementById("feedback").innerHTML =
+                "✅ Correct!";
+
+            miniConfetti();
+
+            updateProgress();
+
+        }
 
     }
 
-  } else {
+    else {
 
-    document.getElementById("feedback").innerHTML =
-    "❌ Incorrect — check your spelling.";
+        document.getElementById("feedback").innerHTML =
+            "❌ Incorrect — wording or spelling isn't exact.";
 
-  }
+    }
 
-  input.value = "";
-  input.focus();
+
+    input.value = "";
+
+    input.focus();
+
 }
 
 
-/* =========================
-   PROGRESS
-========================= */
+/* UPDATE PROGRESS */
 
 function updateProgress() {
 
-  const progress = completed.length;
+    const progress =
+        completed.length;
 
-  document.getElementById("progress").innerText =
-  progress;
 
-  document.getElementById("progressFill").style.width =
-  ((progress / 6) * 100) + "%";
+    document.getElementById("progress").innerText =
+        progress;
 
-  let list = "";
 
-  completed.forEach(name => {
-    list += "✓ " + name + "<br>";
-  });
+    document.getElementById("progressFill").style.width =
+        ((progress / 4) * 100) + "%";
 
-  document.getElementById("completedNames").innerHTML =
-  list;
 
-  if (progress === 6) {
+    let list = "";
 
-    setTimeout(startMegaCelebration, 600);
 
-  }
+    completed.forEach(function(item) {
+
+        list +=
+            "✓ " +
+            item +
+            "<br><br>";
+
+    });
+
+
+    document.getElementById("completedItems").innerHTML =
+        list;
+
+
+    if (progress === 4) {
+
+        setTimeout(
+            startCelebration,
+            600
+        );
+
+    }
+
 }
 
 
-/* =========================
-   MINI CONFETTI
-   EACH CORRECT ANSWER
-========================= */
+/* SMALL CONFETTI FOR EACH RIGHT ANSWER */
 
 function miniConfetti() {
 
-  const colors = [
-    "#ff1744",
-    "#ffea00",
-    "#00e676",
-    "#2979ff",
-    "#d500f9",
-    "#ff9100"
-  ];
-
-  for (let i = 0; i < 45; i++) {
-
-    const piece =
-    document.createElement("div");
-
-    piece.className = "confetti";
-
-    piece.style.left =
-    (45 + Math.random() * 10) + "vw";
-
-    piece.style.top =
-    "45vh";
-
-    piece.style.background =
-    colors[
-      Math.floor(Math.random() * colors.length)
+    const colors = [
+        "#ff1744",
+        "#ffea00",
+        "#00e676",
+        "#2979ff",
+        "#d500f9",
+        "#ff9100"
     ];
 
-    piece.style.setProperty(
-      "--x",
-      (Math.random() * 500 - 250) + "px"
-    );
 
-    piece.style.setProperty(
-      "--y",
-      (Math.random() * 450 - 300) + "px"
-    );
+    for (let i = 0; i < 55; i++) {
 
-    piece.style.animation =
-    "cannonLeft 1.4s ease-out forwards";
+        const piece =
+            document.createElement("div");
 
-    document.body.appendChild(piece);
-
-    setTimeout(() => piece.remove(), 1500);
-  }
-}
+        piece.className =
+            "confetti";
 
 
-/* =========================
-   MEGA CELEBRATION
-========================= */
+        piece.style.left =
+            "50vw";
 
-function startMegaCelebration() {
+        piece.style.top =
+            "50vh";
 
-  document.getElementById("celebration").style.display =
-  "block";
 
-  screenFlash();
+        piece.style.background =
+            colors[
+                Math.floor(
+                    Math.random() *
+                    colors.length
+                )
+            ];
 
-  /* MASSIVE INITIAL CANNONS */
 
-  for (let i = 0; i < 5; i++) {
+        piece.style.setProperty(
+            "--x",
+            (Math.random() * 600 - 300) +
+            "px"
+        );
 
-    setTimeout(() => {
-      cannonBlast("left");
-      cannonBlast("right");
-    }, i * 300);
 
-  }
+        piece.style.setProperty(
+            "--y",
+            (Math.random() * 500 - 300) +
+            "px"
+        );
 
-  /* IMMEDIATE FIREWORKS */
 
-  for (let i = 0; i < 10; i++) {
+        piece.style.animation =
+            "explode 1.5s ease-out forwards";
 
-    setTimeout(() => {
-      createFirework();
-    }, i * 250);
 
-  }
+        document.body.appendChild(piece);
 
-  /* BALLOON FLOOD */
 
-  for (let i = 0; i < 35; i++) {
+        setTimeout(
+            () => piece.remove(),
+            1600
+        );
 
-    setTimeout(() => {
-      createBalloon();
-    }, i * 120);
-
-  }
-
-  /* CONFETTI RAIN */
-
-  celebrationIntervals.push(
-    setInterval(confettiRain, 180)
-  );
-
-  /* RANDOM FIREWORKS */
-
-  celebrationIntervals.push(
-    setInterval(createFirework, 450)
-  );
-
-  /* MORE BALLOONS */
-
-  celebrationIntervals.push(
-    setInterval(createBalloon, 500)
-  );
-
-  /* REPEATED CANNONS */
-
-  celebrationIntervals.push(
-    setInterval(() => {
-
-      cannonBlast("left");
-      cannonBlast("right");
-
-    }, 1500)
-  );
+    }
 
 }
 
 
-/* =========================
-   CONFETTI RAIN
-========================= */
+/* FINAL CELEBRATION */
+
+function startCelebration() {
+
+    document.getElementById("celebration").style.display =
+        "block";
+
+
+    /* HUGE INITIAL CONFETTI */
+
+    for (let i = 0; i < 8; i++) {
+
+        setTimeout(
+            megaBlast,
+            i * 250
+        );
+
+    }
+
+
+    /* BALLOONS */
+
+    for (let i = 0; i < 40; i++) {
+
+        setTimeout(
+            createBalloon,
+            i * 100
+        );
+
+    }
+
+
+    /* KEEP RAINING CONFETTI */
+
+    celebrationInterval =
+        setInterval(
+            confettiRain,
+            180
+        );
+
+}
+
+
+/* GIANT CONFETTI BLAST */
+
+function megaBlast() {
+
+    const colors = [
+        "#ff1744",
+        "#ffea00",
+        "#00e676",
+        "#2979ff",
+        "#d500f9",
+        "#ff9100",
+        "#ffffff"
+    ];
+
+
+    for (let i = 0; i < 120; i++) {
+
+        const piece =
+            document.createElement("div");
+
+        piece.className =
+            "confetti";
+
+
+        piece.style.left =
+            (Math.random() > .5)
+            ? "0px"
+            : "100vw";
+
+
+        piece.style.top =
+            (40 + Math.random() * 50) +
+            "vh";
+
+
+        piece.style.background =
+            colors[
+                Math.floor(
+                    Math.random() *
+                    colors.length
+                )
+            ];
+
+
+        piece.style.setProperty(
+            "--x",
+            (Math.random() * 1200 - 600) +
+            "px"
+        );
+
+
+        piece.style.setProperty(
+            "--y",
+            (-200 - Math.random() * 700) +
+            "px"
+        );
+
+
+        piece.style.animation =
+            "explode 2.2s ease-out forwards";
+
+
+        document.body.appendChild(piece);
+
+
+        setTimeout(
+            () => piece.remove(),
+            2300
+        );
+
+    }
+
+}
+
+
+/* CONFETTI RAIN */
 
 function confettiRain() {
 
-  const colors = [
-    "#ff1744",
-    "#ffea00",
-    "#00e676",
-    "#2979ff",
-    "#d500f9",
-    "#ff9100",
-    "#ffffff"
-  ];
-
-  for (let i = 0; i < 15; i++) {
-
-    const piece =
-    document.createElement("div");
-
-    piece.className = "confetti";
-
-    piece.style.left =
-    Math.random() * 100 + "vw";
-
-    piece.style.top =
-    "-30px";
-
-    piece.style.background =
-    colors[
-      Math.floor(Math.random() * colors.length)
+    const colors = [
+        "#ff1744",
+        "#ffea00",
+        "#00e676",
+        "#2979ff",
+        "#d500f9",
+        "#ff9100",
+        "#ffffff"
     ];
 
-    piece.style.animation =
-    "confettiFall " +
-    (2 + Math.random() * 3) +
-    "s linear forwards";
 
-    document.body.appendChild(piece);
+    for (let i = 0; i < 18; i++) {
 
-    setTimeout(() => piece.remove(), 5200);
-  }
-}
+        const piece =
+            document.createElement("div");
+
+        piece.className =
+            "confetti";
 
 
-/* =========================
-   CONFETTI CANNONS
-========================= */
+        piece.style.left =
+            Math.random() * 100 +
+            "vw";
 
-function cannonBlast(side) {
 
-  const colors = [
-    "#ff1744",
-    "#ffea00",
-    "#00e676",
-    "#2979ff",
-    "#d500f9",
-    "#ff9100",
-    "#ffffff"
-  ];
+        piece.style.top =
+            "-20px";
 
-  screenFlash();
 
-  for (let i = 0; i < 90; i++) {
+        piece.style.background =
+            colors[
+                Math.floor(
+                    Math.random() *
+                    colors.length
+                )
+            ];
 
-    const piece =
-    document.createElement("div");
 
-    piece.className = "confetti";
+        piece.style.animation =
+            "rain " +
+            (2 + Math.random() * 3) +
+            "s linear forwards";
 
-    piece.style.bottom = "20px";
 
-    piece.style.background =
-    colors[
-      Math.floor(Math.random() * colors.length)
-    ];
+        document.body.appendChild(piece);
 
-    if (side === "left") {
 
-      piece.style.left = "30px";
+        setTimeout(
+            () => piece.remove(),
+            5200
+        );
 
-      piece.style.setProperty(
-        "--x",
-        (150 + Math.random() * 800) + "px"
-      );
-
-      piece.style.setProperty(
-        "--y",
-        (-150 - Math.random() * 700) + "px"
-      );
-
-      piece.style.animation =
-      "cannonLeft 2.3s ease-out forwards";
-
-    } else {
-
-      piece.style.right = "30px";
-
-      piece.style.setProperty(
-        "--x",
-        (-150 - Math.random() * 800) + "px"
-      );
-
-      piece.style.setProperty(
-        "--y",
-        (-150 - Math.random() * 700) + "px"
-      );
-
-      piece.style.animation =
-      "cannonRight 2.3s ease-out forwards";
     }
 
-    document.body.appendChild(piece);
-
-    setTimeout(() => piece.remove(), 2500);
-  }
 }
 
 
-/* =========================
-   BALLOONS
-========================= */
+/* BALLOONS */
 
 function createBalloon() {
 
-  const colors = [
-    "#ff1744",
-    "#ffea00",
-    "#00e676",
-    "#2979ff",
-    "#d500f9",
-    "#ff9100",
-    "#ff4081"
-  ];
-
-  const balloon =
-  document.createElement("div");
-
-  balloon.className = "balloon";
-
-  balloon.style.left =
-  Math.random() * 95 + "vw";
-
-  balloon.style.background =
-  colors[
-    Math.floor(Math.random() * colors.length)
-  ];
-
-  balloon.style.animationDuration =
-  (4 + Math.random() * 5) + "s";
-
-  document.body.appendChild(balloon);
-
-  setTimeout(() => balloon.remove(), 9000);
-}
+    const colors = [
+        "#ff1744",
+        "#ffea00",
+        "#00e676",
+        "#2979ff",
+        "#d500f9",
+        "#ff9100",
+        "#ff4081"
+    ];
 
 
-/* =========================
-   FIREWORKS
-========================= */
+    const balloon =
+        document.createElement("div");
 
-function createFirework() {
 
-  const x =
-  10 + Math.random() * 80;
+    balloon.className =
+        "balloon";
 
-  const y =
-  10 + Math.random() * 60;
 
-  const colors = [
-    "#ff1744",
-    "#ffea00",
-    "#00e676",
-    "#2979ff",
-    "#d500f9",
-    "#ff9100",
-    "#ffffff"
-  ];
+    balloon.style.left =
+        Math.random() * 95 +
+        "vw";
 
-  const color =
-  colors[
-    Math.floor(Math.random() * colors.length)
-  ];
 
-  for (let i = 0; i < 45; i++) {
+    balloon.style.background =
+        colors[
+            Math.floor(
+                Math.random() *
+                colors.length
+            )
+        ];
 
-    const particle =
-    document.createElement("div");
 
-    particle.className =
-    "fireworkParticle";
-
-    particle.style.left =
-    x + "vw";
-
-    particle.style.top =
-    y + "vh";
-
-    particle.style.background =
-    color;
-
-    const angle =
-    Math.random() * Math.PI * 2;
-
-    const distance =
-    70 + Math.random() * 220;
-
-    particle.style.setProperty(
-      "--x",
-      Math.cos(angle) * distance + "px"
+    balloon.style.setProperty(
+        "--drift",
+        (Math.random() * 200 - 100) +
+        "px"
     );
 
-    particle.style.setProperty(
-      "--y",
-      Math.sin(angle) * distance + "px"
-    );
 
-    document.body.appendChild(particle);
+    balloon.style.animationDuration =
+        (4 + Math.random() * 4) +
+        "s";
+
+
+    document.body.appendChild(balloon);
+
 
     setTimeout(
-      () => particle.remove(),
-      1500
+        () => balloon.remove(),
+        8500
     );
-  }
+
 }
 
 
-/* =========================
-   FLASH EFFECT
-========================= */
-
-function screenFlash() {
-
-  const flash =
-  document.createElement("div");
-
-  flash.className = "flash";
-
-  document.body.appendChild(flash);
-
-  setTimeout(() => flash.remove(), 400);
-}
-
-
-/* =========================
-   RESET
-========================= */
+/* RESET */
 
 function resetQuiz() {
 
-  completed = [];
+    completed = [];
 
-  celebrationIntervals.forEach(clearInterval);
-  celebrationIntervals = [];
 
-  document.getElementById("progress").innerText =
-  "0";
+    clearInterval(
+        celebrationInterval
+    );
 
-  document.getElementById("progressFill").style.width =
-  "0%";
 
-  document.getElementById("completedNames").innerHTML =
-  "None yet";
+    document.getElementById("progress").innerText =
+        "0";
 
-  document.getElementById("feedback").innerHTML =
-  "";
 
-  document.getElementById("celebration").style.display =
-  "none";
+    document.getElementById("progressFill").style.width =
+        "0%";
 
-  document.querySelectorAll(
-    ".confetti, .balloon, .fireworkParticle, .flash"
-  ).forEach(element => element.remove());
 
-  document.getElementById("answer").value =
-  "";
+    document.getElementById("completedItems").innerHTML =
+        "None yet";
 
-  document.getElementById("answer").focus();
+
+    document.getElementById("feedback").innerHTML =
+        "";
+
+
+    document.getElementById("celebration").style.display =
+        "none";
+
+
+    document.querySelectorAll(
+        ".confetti, .balloon"
+    ).forEach(
+        element => element.remove()
+    );
+
+
+    document.getElementById("answer").value =
+        "";
+
+
+    document.getElementById("answer").focus();
+
 }
 
 
-/* ENTER KEY */
+/* CTRL + ENTER ALSO SUBMITS */
 
 document
 .getElementById("answer")
-.addEventListener("keydown", function(event) {
+.addEventListener(
+    "keydown",
+    function(event) {
 
-  if (event.key === "Enter") {
-    checkAnswer();
-  }
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
 
-});
+            event.preventDefault();
 
-document.getElementById("answer").focus();
+            checkAnswer();
+
+        }
+
+    }
+);
+
+
+document
+.getElementById("answer")
+.focus();
 
 </script>
 
